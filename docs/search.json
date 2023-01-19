@@ -4,7 +4,7 @@
     "href": "posts/example-blog-post/index.html",
     "title": "Hello Blog",
     "section": "",
-    "text": "This is an example of the blog posts that you’ll submit as your primary form of learning demonstration in CSCI 0451. I created this post by modifying the file posts/example-blog-post/index.ipynb in VSCode. You can also use JupyterLab."
+    "text": "This is an example of the blog posts that you’ll submit as your primary form of learning demonstration in CSCI 0451. I created this post by modifying the file posts/example-blog-post/index.ipynb in VSCode. You can also use JupyterLab for this editing if you prefer. Finally, it is possible to write blog posts without using notebooks by writing .qmd files, as illustrated here."
   },
   {
     "objectID": "posts/example-blog-post/index.html#math",
