@@ -4,7 +4,7 @@
     "href": "posts/perceptron/perceptron_blog.html",
     "title": "Perceptron Blog",
     "section": "",
-    "text": "from perceptron import Perceptron"
+    "text": "source code link: https://github.com/yanruoz/yanruoz.github.io/blob/main/posts/perceptron/perceptron.py"
   },
   {
     "objectID": "posts/perceptron/perceptron_blog.html#implementation-of-the-perceptron-update",
