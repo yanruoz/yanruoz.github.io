@@ -23,7 +23,7 @@ class LogisticRegression():
         self.loss_history = []
         self.score_history = []
         
-        # obtain n, p
+        # obtain n (number of data points), p (number of features)
         n, p = X.shape
 
         # initialize a random initial weight vector w_tilt(0)
@@ -86,6 +86,8 @@ class LogisticRegression():
             beta = 0
         
         # main loop
+        # Source code:
+        # the main loop structure is based on the instruction of the blog post: https://middlebury-csci-0451.github.io/CSCI-0451/assignments/blog-posts/blog-post-optimization.html
         for j in np.arange(m_epochs):
             
             # shuffle the points randomly
