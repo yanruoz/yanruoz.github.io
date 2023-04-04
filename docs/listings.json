@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/linear_reg/linear_reg.html",
       "/posts/penguin_classification/penguin.html",
       "/posts/logistic_regression/gradient_blog.html",
       "/posts/perceptron/perceptron_blog.html",
