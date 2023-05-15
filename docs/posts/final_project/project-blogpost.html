@@ -280,7 +280,7 @@ background-size: cover;
 <p>From Figure 1, we see that as the number of features increases, while the training accuracy increases to reach a plateau, the validation accuracy remains fluctuating, indicating the problem of overfitting. The overfitting is especially obvious in our 2D models, so we attempted to adjust it by adding the dropout layer (Figure 1). The overfitting got slightly under control, which is illustrated by a drop in the training accuracy plateau and an increasing trend in the validation accuracy (Figure 1).</p>
 <div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"table1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"table1.png"</span>, width<span class="op">=</span><span class="dv">300</span>, height<span class="op">=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 
 <img src="table1.png">
