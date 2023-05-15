@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alice (Yanruo) Zhang, Wen (Diana) Xu">
+<meta name="dcterms.date" content="2023-05-14">
+<meta name="description" content="This blog post demonstrates the motivation, methods, and results of our final project in speech emotion recognition.">
+
+<title>My Awesome CSCI 0451 Blog - Speech Emotion Recognition</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>
+    .quarto-title-block .quarto-title-banner {
+      color: white;
+background-image: url(../../img/landscape.png);
+background-size: cover;
+    }
+    </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Awesome CSCI 0451 Blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Speech Emotion Recognition</h1>
+                  <div>
+        <div class="description">
+          This blog post demonstrates the motivation, methods, and results of our final project in speech emotion recognition.
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Alice (Yanruo) Zhang, Wen (Diana) Xu </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 14, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="speech-emotion-recognition" class="level1">
+<h1>Speech Emotion Recognition</h1>
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<p>Our project focused on predicting the emotion expressed by human speech based on the Mel Frequency Cepstral Coefficient (MFCC) features. Using the speech audio files in the Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS), we approached the problem by cleaning the data and transforming the audio files to a machine-readable format, visually exploring the data with a focus on the MFCC features in different emotions, experimenting with 1D and 2D convolutional neural network (CNN) models to train and test. We achieved the highest training accuracy of 78% and test accuracy of 66% via our 1D CNN model with two convolutional layers, two fully-connected layers, and 30 MFCCs, which is higher than the base rate but lower than existing models with a similar approach. In the future, we hope to work on experimenting with other deep learning models, using different numbers of MFCC features, increasing the number of epochs, and applying data augmentation to improve our results. By providing an ethical reflection on speech emotion recognition, we acknowledged the controversiality of this field and urged researchers to ponder on the groups that potentially benefit from and are harmed by related works.</p>
+<p>Our code is available at: https://github.com/wendianaxu/speech-emotion-recognition.</p>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Recognizing emotions from human speech is an important task with various applications in human-centered computing, because it allows automatic systems to interpret users’ emotions, and make decisions and provide responses accordingly. In real life, people convey emotions not only through the literal meanings of their speech, but also, and probably more often, with voice qualities such as intonation. Accurate speech emotion recognition with machines has the potential to benefit fields such as criminal investigation, medical care, and the service industry.</p>
+<p>Many researchers have tackled the problem of speech emotion recognition with machine learning models. <span class="citation" data-cites="badshah2017speech">Badshah et al. (<a href="#ref-badshah2017speech" role="doc-biblioref">2017</a>)</span> used Convolutional Neural Networks (CNN) on speech spectrogram images to classify seven emotions and achieved an overall accuracy of 84.3% across all data. However, emotions of boredom, fear, happiness, and neutral have relatively low accuracies below 50%.</p>
+<p>Mel-Frequency Cepstral Coefficients (MFCCs) are coefficients that represent an audio clip and contain information about the rate changes in the different spectrum bands. <span class="citation" data-cites="xu2020improve">Xu, Zhang, and Khan (<a href="#ref-xu2020improve" role="doc-biblioref">2020</a>)</span> used MFCCs as features to train an attention-based CNN model on speech emotion data. Their model achieved an accuracy of around 76% in classifying speech into nine emotions. <span class="citation" data-cites="kumbhar2019speech">Kumbhar and Bhandari (<a href="#ref-kumbhar2019speech" role="doc-biblioref">2019</a>)</span> used MFCC features on Long Short Term Memory (LSTM) models and obtained an accuracy of around 85% with the Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS), which is the dataset that we used for our project.</p>
+</section>
+<section id="values-statement" class="level2">
+<h2 class="anchored" data-anchor-id="values-statement">Values Statement</h2>
+<p>Audio speech emotion recognition is a sub-branch of speech recognition, which plays an important role in deepening and widening the AI’s functionality. Potential users of speech emotion recognition include people from commercial industries, the medical field, and the anti-criminal field.</p>
+<p>In the commercial industry, for example, a developed speech emotion detection and classification technology can help dialogue systems for spoken language such as call centers, onboard vehicle driving systems, and intelligent voice systems like Siri to better understand human emotions, leading to improved human-computer interactions and a more customized user experience. Similarly, applications and websites utilizing AI for text-to-speech conversions could cater to visually impaired users by conveying emotions effectively.</p>
+<p>Beyond commercial applications, the medical field can also benefit from the application of our project. Emotion classification could serve as a valuable tool for various aspects of the field of mental health. Firstly, it could contribute potentially to assisting the diagnosis of psychiatric disorders. If audio-speech detection systems could accurately detect and categorize emotions expressed by individuals, clinicians, and mental health professionals might gain deeper insights into their psychological well-being, potentially leading to more accurate diagnoses and personalized treatment plans. Additionally, emotion classification can play a vital role in offering effective psychological counseling. By analyzing emotional patterns and fluctuations over time, therapists can gain a better understanding of their clients’ emotional states as the sessions go on, thus tailoring their counseling approaches accordingly. Furthermore, the ability to monitor mental states using emotion classification technology holds great promise in preventing potential risks of mental illnesses and speech-related disorders. By continuously assessing the emotions of an individual, it increases the probability of detecting early warning signs of heightened emotional distress, and deteriorating mental conditions, proactively allowing timely interventions and preventive measures. Emotional cues and patterns in speech can provide valuable insights into certain conditions such as hyperkinetic dysphonia and hypokinetic dysphonia. Therefore, by accurately recognizing and classifying these emotional nuances in speech, clinicians may better assess speech disorders, catch the early symptoms, and provide more targeted treatment plans. In summary, serving as a potentially effective tool in diagnosing psychiatric diseases, offering psychological counseling, monitoring mental states to prevent risks, and identifying speech-related disorders, speech emotion classification has wide-ranging applications in the medical field, contributing to the technological revolution for providing better medical care.</p>
+<p>Another field with potential users is the realm of crime prevention and resolution. The application of our project could potentially contribute to the development of lie-detection algorithms and devices. The ability to accurately detect deception can have profound implications for law enforcement agencies, intelligence organizations, and legal proceedings. By leveraging the advancements in audio emotion detection and classification, the development of robust lie detection algorithms and devices can empower law enforcement agencies and negotiators with an additional layer of objective analysis, complementing their expertise and intuition. Despite the challenges of ethically incorporating this technology into the legal framework, the inclusion of emotion and lie detection has great potential to augment the capabilities of people who work in the field of anti-criminality.</p>
+<p>However, certain groups may not directly benefit from this project. Hearing-disabled individuals, who predominantly rely on non-verbal communication, are excluded from this kind of technology. Greater risks of the application of this project lie in its use for non-ethical deeds. For instance, kidnappers could exploit emotion detection algorithms to gauge the emotions of hostages and their families, potentially facilitating blackmail. We must also address potential biases in this project and its applications. Since the dataset primarily employs English with a neutral North American accent, the resulting models may be biased against speakers with different accents or non-English speakers. In commercial products, it may not work as well for users who are non-English speakers or possess certain dialects. Since accents and languages suggest a difference in cultural, racial, and perhaps even socio-economic status, the careless use of this technology before enough diverse data are collected could further harm the already marginalized groups. This misuse could cause substantial harm especially if used in the medical or the anti-criminal field for making important decisions such as hospitalization or sentencing. Nonetheless, starting with a “standard” English pipeline and acknowledging the potential biases and dire consequences is not a bad way to start developing a technology. However, to foster inclusivity, it is crucial to gradually incorporate more dialects and languages, ensuring the development of comprehensive speech-emotion recognition algorithms.</p>
+<p>Our personal reasons to work on this problem of implementing, improving, and spreading the technology of speech emotion recognition emerged from our interest in psychology and human-computer interaction. However, as we consider more the ethical controversies of this project and its applications, we are infused with the sense of responsibility to acknowledge the potential biases and make an effort to proactively address them. Therefore, we are driven by our passion for the technological aspects but also the sense of awareness to bring our interest in the direction of benefiting the world and cautiously making technology inclusive to the marginalized groups. Given our discussion on the potential biases and harm the application of speech emotion recognition may bring, it is difficult to assert that the world will become a better place with more equity, justice, and care with this technology. Therefore, we remind ourselves and urge professionals working in the realm to be cautious and remain critical regarding our work, progressing towards eliciting this technology’s most beneficial potential and reducing the potential disadvantages as much as possible.</p>
+</section>
+<section id="materials-and-methods" class="level2">
+<h2 class="anchored" data-anchor-id="materials-and-methods">Materials and Methods</h2>
+<section id="our-data" class="level3">
+<h3 class="anchored" data-anchor-id="our-data">Our Data</h3>
+<p>Our dataset of speech emotions comes from Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS), collected by <span class="citation" data-cites="livingstone2018ryerson">Livingstone and Russo (<a href="#ref-livingstone2018ryerson" role="doc-biblioref">2018</a>)</span>. The dataset contains vocalizations of only two different English sentences that share the same lexical structure. They were spoken by 24 actors, male and female, each in eight emotions of two levels of intensity. Each combination of sentence and emotion was repeated twice by the same actor. These vocalizations were validated by more than 200 raters who rated them on emotional validity, intensity, and genuineness.</p>
+<p>Since the dataset only contains English sentences spoken in a neutral North American accent, it has a limited scope in that it does not represent speakers of other languages and English speakers using other accents.</p>
+</section>
+<section id="our-approach" class="level3">
+<h3 class="anchored" data-anchor-id="our-approach">Our Approach</h3>
+<p>We chose to use MFCC features as predictors for our models because they have shown good performance in previous works. We experimented with different numbers of MFCC features: 13 MFCCs, which is a common choice for speech recognition (<span class="citation" data-cites="hasan2021many">Hasan, Hasan, and Hossain (<a href="#ref-hasan2021many" role="doc-biblioref">2021</a>)</span>), and 30 MFCCs. We also experimented with taking the mean of MFCCs across time, resulting in an 1D feature matrix with only MFCCs, or including time as another dimension in our feature matrix. Our targets are the emotion labels from the original dataset.</p>
+<p>Because the audio files in the dataset contain silent moments, we trimmed out these moments to reduce irrelevant features. We used 1D CNN models on our aggregate MFCC features and 2D CNN models on MFCC features across time. We started from basic model architectures with two convolutional layers and two fully-connected layers, and adjusted them by adding layers according to training results. For example, we added dropout layers for models that exhibited overfitting.</p>
+<p>We trained our models on GPU in Google Colab. We used cross entropy loss for our loss function and Adam for optimizer. Our learning rate was 0.001.</p>
+<p>We evaluated our models primarily using running training accuracy and testing accuracy. The size of our test set was 20% of the entire dataset.</p>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>Among our 1D CNN models, the best model is the one with 2 convolutional layers, 2 fully-connected layers, and 30 MFCCs. This model has a training accuracy of 78% and a test accuracy of 66%, which although is not the most ideal result, still makes a much better prediction than the base rate of 12.5% (Table 1). The accuracy results of all our 1D CNN models are shown in Table 1.</p>
+<p>Since we found that the test accuracy increased as the number of MFCCs increased in our 1D CNN models, we only developed 2D models with 30 MFCCs (Table 1). Table 2 demonstrates the accuracies obtained from all of our 2D CNN models. In general, 2D CNN models illustrated a significant improvement in training accuracy but not test accuracy compared to the 1D models, and our best model remains to be the 1D model with 2 convolutional layers, 2 fully-connected layers, and 30 MFCCs (Table 2).</p>
+<p>From Figure 1, we see that as the number of features increases, while the training accuracy increases to reach a plateau, the validation accuracy remains fluctuating, indicating the problem of overfitting. The overfitting is especially obvious in our 2D models, so we attempted to adjust it by adding the dropout layer (Figure 1). The overfitting got slightly under control, which is illustrated by a drop in the training accuracy plateau and an increasing trend in the validation accuracy (Figure 1).</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"table1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+
+<img src="table1.png">
+</div>
+</div>
+<p>Table 1. The summary statistics of the 1D convolutional neural network (CNN) models. # MFCC is the number of MFCCs. The # Conv layers is the number of convolutional layers. The # FC layers is the number of fully-connected layers. The learning rate for all the listed models is 0.001, and the number of epochs is 50.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"table2.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+
+<img src="table2.png">
+</div>
+</div>
+<p>Table 2. The summary statistics of the 2D convolutional neural network (CNN) models. All models have 2 convolutional layers, 2 fully-connected layers, 30 MFCCs, and a learning rate of 0.001. The number of epochs are set to be 50.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"fig1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<img src="fig1.png">
+</div>
+</div>
+<p>Figure 1. The change of training and validation accuracies over epochs on selected 1D and 2D CNN models.</p>
+</section>
+<section id="concluding-discussion" class="level2">
+<h2 class="anchored" data-anchor-id="concluding-discussion">Concluding Discussion</h2>
+<p>Our project is a complete process with the following planned steps: 1) cleaning the data and transforming the audio files to a machine-readable format, 2) exploring the data with a focus on the MFCC features, 3) using deep learning models to train the test dataset, and 4) testing with the test dataset. We have a notebook showing our working flow with detailed commenting and illustrative figures.</p>
+<p>We said in our proposal that our evaluation of the success will be based on: 1) completeness in data cleaning, training, and testing; 2) use of plots that demonstrate comprehensive data exploration and data analysis; 3) level of detail in documentation; 4) level of model accuracy; 5) depth of discussion on implications and potential biases; and 6) the clarity, conciseness, and accessibility of the presentation.</p>
+<p>We did a quite good job on criteria 1), 2), 3), and 5). For criterion 4), although we improved our models in the limited time, they still have many potential directions for improvement. Although our models achieved accuracies significantly higher than the base rate, they are less accurate than existing models that used similar approaches to recognize speech emotions, which typically have accuracies of 70-80%. If we had more time, we would do the following to improve our test accuracy:</p>
+<ul>
+<li>Try to use another deep learning model such as the LSTM network, which was shown to work well with audio data (<span class="citation" data-cites="kumbhar2019speech">Kumbhar and Bhandari (<a href="#ref-kumbhar2019speech" role="doc-biblioref">2019</a>)</span>).</li>
+<li>Experiment with different numbers of MFCC features. Our 2D models with 30 MFCCs showed significant overfitting, so we may be able to improve performance by reducing the number of MFCCs.</li>
+<li>Use data augmentation techniques such as adding white noise, shifting, and stretching to increase the data size.</li>
+<li>Train with more epochs, since the 2D model with the dropout layer seemed not reaching its plateau.</li>
+</ul>
+<p>For criteria 6), we had a clear and understandable presentation with assisting tables and figures however, we were a bit short on time to present the final slide on the discussion of ethics for our project, which is an important component of our project. If we had more time, we would also like to perform a bias audit on our results, for example on whether accuracies vary for male and female voices.</p>
+<p>In terms of the deliverables, our proposed success was to have a Python package and a Jupyter notebook. However, since we did not write any separate Python scripts, and everything was integrated into one notebook, we still consider that we have met the completeness goal.</p>
+<p>In terms of model quality, we said partial success is that despite the completeness, the model has a low accuracy. Since our model reached a much higher-than-base-rate accuracy that is lower than the accuracy achieved by publicly available algorithms, we think we fall between partial and full success.</p>
+</section>
+<section id="group-contributions-statement" class="level2">
+<h2 class="anchored" data-anchor-id="group-contributions-statement">Group Contributions Statement</h2>
+<section id="code" class="level3">
+<h3 class="anchored" data-anchor-id="code">Code</h3>
+<ul>
+<li>Data preprocessing: Diana</li>
+<li>Data exploration: Alice</li>
+<li>1D models: Diana &amp; Alice</li>
+<li>2D models: Diana ### Writing and Presentation</li>
+<li>Abstract: Alice</li>
+<li>Introduction: Diana</li>
+<li>Values statement: Alice</li>
+<li>Materials and methods: Diana</li>
+<li>Concluding discussion: Diana &amp; Alice</li>
+<li>Group contributions statement: Diana &amp; Alice</li>
+<li>Presentation preparation and delivery: Diana &amp; Alice</li>
+</ul>
+</section>
+</section>
+<section id="personal-reflection" class="level2">
+<h2 class="anchored" data-anchor-id="personal-reflection">Personal Reflection</h2>
+<p>In the process of researching our project and writing the proposal, I learned about some basic tools to process audio files such as Librosa, Pytorch, and TensorFlow. I used to wonder how one transforms audio files into matrices that are readable and trainable by the computer, so the exploration before we started was useful for solving that mystery for me. During implementation, I learned specifically how to use these libraries and packages to load data and preprocess data. I was also able to integrate the knowledge we learned in class on CNN and modify the code from our lectures to fit our datasets. In the many problem-solving sessions I had with my partner, I gained a deeper understanding of the concepts in CNN such as FC layers, dropout layers, and batch normalization, and also enhanced my programming and debugging skills, especially when working with matrices and dimensionality. Working with my partner also broadened my perspective on various ways to dive deeper based on what we already had. For instance, while I mainly thought of incrementing the parameters such as epochs and the number of features to better our models, she thought about examining the accuracies in different emotions respectively to explore areas of potential improvement.</p>
+<p>As for my personal goals including submitting everything on time, communicating effectively, contributing my part of writing, coding, and presentation in a relatively equal position with my partner, and navigating GitHub collaboration, I think I have achieved all of them. The communication part went extremely well as we set chunks of time every week to work together on this project. The area that I may need more improvement in is developing more out-of-box thinking in terms of project development and more proficiency in coding. Both require intentional practices that I will try to give more attention to and spend more time on.</p>
+<p>I will aim to carry this collaborating habit with me in my future research career in a computation biologist position, in which I could set shared working times with my partners and report our progress weekly. In addition, I would also like to carry the critical thinking skills I obtained in this class regarding the ethics of machine learning into any of my future work. I will keep thinking about the groups that benefit from and are harmed by applications of the computational work I will be doing, bringing more awareness in my research circles on the controversial ethical issues in scientific research.</p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-badshah2017speech" class="csl-entry" role="doc-biblioentry">
+Badshah, Abdul Malik, Jamil Ahmad, Nasir Rahim, and Sung Wook Baik. 2017. <span>“Speech Emotion Recognition from Spectrograms with Deep Convolutional Neural Network.”</span> In <em>2017 International Conference on Platform Technology and Service (PlatCon)</em>, 1–5. IEEE.
+</div>
+<div id="ref-hasan2021many" class="csl-entry" role="doc-biblioentry">
+Hasan, Md Rakibul, Md Mahbub Hasan, and Md Zakir Hossain. 2021. <span>“How Many Mel-Frequency Cepstral Coefficients to Be Utilized in Speech Recognition? A Study with the Bengali Language.”</span> <em>The Journal of Engineering</em> 2021 (12): 817–27.
+</div>
+<div id="ref-kumbhar2019speech" class="csl-entry" role="doc-biblioentry">
+Kumbhar, Harshawardhan S, and Sheetal U Bhandari. 2019. <span>“Speech Emotion Recognition Using MFCC Features and LSTM Network.”</span> In <em>2019 5th International Conference on Computing, Communication, Control and Automation (ICCUBEA)</em>, 1–3. IEEE.
+</div>
+<div id="ref-livingstone2018ryerson" class="csl-entry" role="doc-biblioentry">
+Livingstone, Steven R, and Frank A Russo. 2018. <span>“The Ryerson Audio-Visual Database of Emotional Speech and Song (RAVDESS): A Dynamic, Multimodal Set of Facial and Vocal Expressions in North American English.”</span> <em>PloS One</em> 13 (5): e0196391.
+</div>
+<div id="ref-xu2020improve" class="csl-entry" role="doc-biblioentry">
+Xu, Mingke, Fan Zhang, and Samee U Khan. 2020. <span>“Improve Accuracy of Speech Emotion Recognition with Attention Head Fusion.”</span> In <em>2020 10th Annual Computing and Communication Workshop and Conference (CCWC)</em>, 1058–64. IEEE.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
