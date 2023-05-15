@@ -23,69 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
@@ -150,9 +87,6 @@ background-image: url(../../img/landscape.png);
 background-size: cover;
     }
     </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -278,29 +212,29 @@ background-size: cover;
 <p>Among our 1D CNN models, the best model is the one with 2 convolutional layers, 2 fully-connected layers, and 30 MFCCs. This model has a training accuracy of 78% and a test accuracy of 66%, which although is not the most ideal result, still makes a much better prediction than the base rate of 12.5% (Table 1). The accuracy results of all our 1D CNN models are shown in Table 1.</p>
 <p>Since we found that the test accuracy increased as the number of MFCCs increased in our 1D CNN models, we only developed 2D models with 30 MFCCs (Table 1). Table 2 demonstrates the accuracies obtained from all of our 2D CNN models. In general, 2D CNN models illustrated a significant improvement in training accuracy but not test accuracy compared to the 1D models, and our best model remains to be the 1D model with 2 convolutional layers, 2 fully-connected layers, and 30 MFCCs (Table 2).</p>
 <p>From Figure 1, we see that as the number of features increases, while the training accuracy increases to reach a plateau, the validation accuracy remains fluctuating, indicating the problem of overfitting. The overfitting is especially obvious in our 2D models, so we attempted to adjust it by adding the dropout layer (Figure 1). The overfitting got slightly under control, which is illustrated by a drop in the training accuracy plateau and an increasing trend in the validation accuracy (Figure 1).</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"table1.png"</span>, width<span class="op">=</span><span class="dv">300</span>, height<span class="op">=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
-
-<img src="table1.png">
-</div>
-</div>
+<style>
+    img {
+        width: 100%;
+        height: auto;
+    }
+</style>
+<p><img src="table1.png" alt="Image"></p>
 <p>Table 1. The summary statistics of the 1D convolutional neural network (CNN) models. # MFCC is the number of MFCCs. The # Conv layers is the number of convolutional layers. The # FC layers is the number of fully-connected layers. The learning rate for all the listed models is 0.001, and the number of epochs is 50.</p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"table2.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
-
-<img src="table2.png">
-</div>
-</div>
+<style>
+    img {
+        width: 100%;
+        height: auto;
+    }
+</style>
+<p><img src="table2.png" alt="Image"></p>
 <p>Table 2. The summary statistics of the 2D convolutional neural network (CNN) models. All models have 2 convolutional layers, 2 fully-connected layers, 30 MFCCs, and a learning rate of 0.001. The number of epochs are set to be 50.</p>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span><span class="st">"fig1.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
-<img src="fig1.png">
-</div>
-</div>
+<style>
+    img {
+        width: 100%;
+        height: auto;
+    }
+</style>
+<p><img src="fig1.png" alt="Image"></p>
 <p>Figure 1. The change of training and validation accuracies over epochs on selected 1D and 2D CNN models.</p>
 </section>
 <section id="concluding-discussion" class="level2">
