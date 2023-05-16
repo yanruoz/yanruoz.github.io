@@ -217,7 +217,10 @@ background-size: cover;
 
 
 
-<div class="cell" data-execution_count="40">
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In this blog post, I will work through a complete example of the standard machine learning workflow by classifying three penguine species: chinstrap, gentoo, and adelie. My primary goal is to determine the smallest number of measurements necessary to confidently determine the species of a penguin. I will first inspect the dataset and prepare the dataset by dropping columns that are not needed and converting binary variables into dummy variables that are machine-readable. Then, I will conduct some data exploration which includes 1) grouping the penguins by sex and inspect their body mass, and 2) using the pair plot to eye-ball the associative relationship between each features. Next, I will use four models (logistic regression, decision tree, support vector machine, and random forest) to determine what are the best features for classification. All of the models ended up choosing the same features. Then I will train and test all the models, assessing their performance by accuracy on the test dataset. Finally, I will plot the decision regions to visualize how each model classifies the penguins in both training and testing datasets. The conclusion I got is that the logistic regression model works the best.</p>
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -239,9 +242,11 @@ background-size: cover;
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
 <section id="data-inspection" class="level2">
 <h2 class="anchored" data-anchor-id="data-inspection">Data Inspection</h2>
-<div class="cell" data-execution_count="2">
+<p>I firstly inspect the training data by importing it as a data frame. The dataset is called the Palmer Penguins data, collected by Dr.&nbsp;Kristen Gorman and the Palmer Station, Antarctica LTER, a member of the Long Term Ecological Research Network based on the information given to me (https://middlebury-csci-0451.github.io/CSCI-0451/assignments/blog-posts/blog-post-penguins.html).</p>
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>train_url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/middlebury-csci-0451/CSCI-0451/main/data/palmer-penguins/train.csv"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(train_url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -383,7 +388,8 @@ background-size: cover;
 </section>
 <section id="data-prep" class="level2">
 <h2 class="anchored" data-anchor-id="data-prep">Data Prep</h2>
-<div class="cell" data-execution_count="30">
+<p>I then prepare the data by dropping the columns of “studyName”, “Sample Number”, “Individual ID”, “Date Egg”, “Comments”, “Region” to keep the data frame relatively small for facilitating further analysis. I also transform binary variables including the island names, their adult stage, clutch completion, and sex into dummy variables.</p>
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>le.fit(train[<span class="st">"Species"</span>])</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -535,7 +541,7 @@ background-size: cover;
 </section>
 <section id="data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="data-exploration">Data Exploration</h2>
-<p>In the following table, we group the data by sex and calculate the mean body mass for each sex. We can see from the result that the mean body mass of the male penguins is substantially higher than the mean body mass of the female penguins.</p>
+<p>In the following table, I group the data by sex and calculate the mean body mass for each sex. We can see from the result that the mean body mass of the male penguins is substantially higher than the mean body mass of the female penguins.</p>
 <div class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>X_train.groupby([<span class="st">'Sex_MALE'</span>])[[<span class="st">'Body Mass (g)'</span>]].aggregate([np.mean,<span class="bu">len</span> ]).<span class="bu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="46">
@@ -575,7 +581,7 @@ background-size: cover;
 </div>
 </div>
 </div>
-<p>In the subsequent pair chart, we inspect the correlation between each pair of features. We can see that the culmen length, the culmen depth, the flipper length, and the body mass are in general positively correlated with each other. It also seems like if we were to differentiate the species, Delta 15 N would be a good measurement because the means of the three clusters are more distinctly separated compared to that separation in other features.</p>
+<p>In the subsequent pair chart, we inspect the correlation between each pair of features. We can see that the culmen length, the culmen depth, the flipper length, and the body mass are in general positively correlated with each other. It also seems like if we were to differentiate the species, Delta 15 N would be a good measurement because the means of the three clusters are more distinctly separated compared to that separation in other features. However, partially due to my misunderstanding of the instruction and limited time, I have removed the Delta 15 N previously to keep the training and testing process simple. We, thus, did not have a chance to see if this feature would be selected by the machine learning algorithms. Nevertheless, it is a good practice for future studies to draw the pair plot and inspect the relationships between features to determine which features to be kept or removed.</p>
 <div class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"ticks"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sns.pairplot(train, hue<span class="op">=</span><span class="st">"Species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -590,7 +596,7 @@ background-size: cover;
 <section id="choosing-features" class="level2">
 <h2 class="anchored" data-anchor-id="choosing-features">Choosing Features</h2>
 <p>In the following chunk of code, we loop through three models (logistic regression, support vector machine, and random forest) as well as the groups of features to determine what are the best three features (2 quantitative and 1 qualitative) to determine the species. The skeleton of the code is based on the blog instruction (https://middlebury-csci-0451.github.io/CSCI-0451/assignments/blog-posts/blog-post-penguins.html#your-challenge).</p>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale the model to prevent warnings</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X_train_scaled <span class="op">=</span> scaler.fit_transform(X_train)</span>
@@ -641,9 +647,11 @@ The best score for Random Forest was 0.996078431372549 and the best columns were
 The best model was Logistic Regression with a score of 0.996078431372549 and the best columns were ['Culmen Length (mm)', 'Culmen Depth (mm)', 'Island_Biscoe', 'Island_Dream', 'Island_Torgersen']</code></pre>
 </div>
 </div>
+<p>Our results showed that all models chose the same set of features, showing a strong evidence that these features are good choices for our classification. The scores across models were approximately the same.</p>
 </section>
 <section id="model-choices" class="level2">
 <h2 class="anchored" data-anchor-id="model-choices">Model Choices</h2>
+<p>To train the model, I firstly use logistic regression based on the instruction. Additionally, I also explore other models including decision tree, random forest, and SVC.</p>
 <section id="logistic-regression" class="level3">
 <h3 class="anchored" data-anchor-id="logistic-regression">Logistic Regression</h3>
 <div class="cell" data-execution_count="8">
@@ -727,7 +735,8 @@ The best model was Logistic Regression with a score of 0.996078431372549 and the
 Best score: 0.7730769230769232</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="13">
+<p>This gamma value is calculatef first and then used when seleting the features.</p>
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train/Fit &amp; Calculate training score</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>svc_best <span class="op">=</span> SVC(gamma <span class="op">=</span> <span class="fl">0.01</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>svc_best.fit(X_train[best_cols], y_train)</span>
@@ -737,6 +746,7 @@ Best score: 0.7730769230769232</code></pre>
 <pre><code>svc_train_score=0.98046875</code></pre>
 </div>
 </div>
+<p>Our training results showed that logistic regression, decision tree, and random forest all have an accuracy of 100%, and SVC obtained a not-so-bad 98%.</p>
 </section>
 </section>
 </section>
@@ -777,9 +787,11 @@ Random Forest test score: 0.9852941176470589
 SVC test score: 0.9264705882352942</code></pre>
 </div>
 </div>
+<p>Our test results showed that LR seemed to be the best model with an accuracy of 100%, following it were the decision tree and random forest with the same accuracy of 98.5%, and the last one was SVC with a score of 92.6%, which is quite consistent with our training results.</p>
 </section>
 <section id="plotting-decision-regions" class="level2">
 <h2 class="anchored" data-anchor-id="plotting-decision-regions">Plotting Decision Regions</h2>
+<p>In this section, we plot the decision regions to visualize the peformance of classification for all of the models in both training and testing.</p>
 <div class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The skeleton of the code is based on the blog instruction (https://middlebury-csci-0451.github.io/CSCI-0451/assignments/blog-posts/blog-post-penguins.html#your-challenge).</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regions(model, X, y, model_name):</span>
@@ -875,9 +887,13 @@ SVC test score: 0.9264705882352942</code></pre>
 <p><img src="penguin_files/figure-html/cell-20-output-4.png" class="img-fluid"></p>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Through different machine learning algorithms that ouputed the same results, we selected culmen length, culmen depth, and thr island the penguins are from as the best features for classification. After our comparison between models, we found our best model to be the logistic regression model with both the training and testing accuracies of 100%. The second best models were the random forest and the decision tree models with a training accuracy of 100% and a test accuracy of 98.5%. The least effective model in our evaluation was the support vector machine, with a training accuracy of 98.0% and a test accuracy of 92.6%. Overall, the feature selection and the classification showed high accuracies and were considered successful. If we had time, we would include more columns from the original dataset to train for finding the best features. In that way, we could also see if our model performance would enhance.</p>
+
+
 </section>
 
 </main> <!-- /main -->
